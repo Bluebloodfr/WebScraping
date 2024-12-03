@@ -29,7 +29,15 @@ Le déroulé d'une requete :
 5. SentimentsAnalysis sur ces commentaires
 6. Affichage (optionnel)
 
-DL datatourisme zip
+## Initialisation
+
+1. Create a file .env on root
+```
+ROOT_DIR=<root directory>
+API_KEY=<weather api key>
+```
+
+2. Download datatourisme zip file
 ```bash
 ./back/tourisme/downlaod_zip.sh
 ```

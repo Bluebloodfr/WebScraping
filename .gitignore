@@ -3,6 +3,7 @@
 Makefile
 
 data/*
+back/weather/api
 back/*.ipynb
 back/*/__pycache__
 back/__pycache__
