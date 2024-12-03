@@ -1,9 +1,6 @@
-streamlit
 pandas
 numpy
-altair
-pathlib
 plotly
 geopandas
-Pillow
 nbformat>=4.2.0
+python-dotenv
