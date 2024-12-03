@@ -1,0 +1,9 @@
+streamlit
+pandas
+numpy
+altair
+pathlib
+plotly
+geopandas
+Pillow
+nbformat>=4.2.0

@@ -15,7 +15,7 @@ Notation :
 
 Goal : Recommander Quel lieu visiter & quand en se basant sur :
 - les centres d'interêt [API](https://gitlab.adullact.net/adntourisme/datatourisme/api)
-- les prévision météo [API](https://api.meteo-concept.com/ )
+- les prévision météo [API](https://api.meteo-concept.com/documentation_openapi )
 - Commentaires Google Maps (scrapping dynamique + NLP)
 
 
@@ -28,3 +28,8 @@ Le déroulé d'une requete :
 4. Chercher les commentraires Google Maps associés
 5. SentimentsAnalysis sur ces commentaires
 6. Affichage (optionnel)
+
+DL datatourisme zip
+```bash
+./back/tourisme/downlaod_zip.sh
+```

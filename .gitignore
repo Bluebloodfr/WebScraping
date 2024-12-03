@@ -1,0 +1,11 @@
+.venv
+
+Makefile
+
+data/*
+back/*.ipynb
+back/*/__pycache__
+back/__pycache__
+
+
+back/meteo/api
