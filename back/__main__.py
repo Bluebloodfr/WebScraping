@@ -1,1 +1,7 @@
-# gestion à terme de tt les autres fonctions de back
+from weather import weather_dict
+
+def main():
+    print(weather_dict)
+
+if __name__ == "__main__":
+    main()
