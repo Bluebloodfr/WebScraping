@@ -41,3 +41,8 @@ API_KEY=<weather api key>
 ```bash
 ./back/tourisme/downlaod_zip.sh
 ```
+
+3. Run the app
+```bash
+streamlit run app.py
+```

@@ -32,7 +32,7 @@ def log_score(X, alpha=1/8):
     
     return 1 - bad_weather_score
 
-def weather_score(response):
+def get_weather_score(response):
     forecast_list = response['forecast']
     weather_score = [
         forecast['weather'].apply(log_score)
