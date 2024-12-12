@@ -73,7 +73,7 @@ def get_gmaps_reviews(place_id):
     # Convert to DataFrame
     df_reviews = pd.DataFrame(reviews)
     return df_reviews
-
+'''
 # https://www.google.com/maps/place/?q=place_id:ChIJdUyx15R95kcRj85ZX8H8OAU
 # Exemple d'utilisation
 place_id = 'ChIJdUyx15R95kcRj85ZX8H8OAU'  # Chateau de Versailles
@@ -82,3 +82,4 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.expand_frame_repr', False)
 print(reviews_df)
 #print(reviews_df.head())
+'''
