@@ -83,3 +83,6 @@ pd.set_option('display.expand_frame_repr', False)
 print(reviews_df)
 #print(reviews_df.head())
 '''
+
+# Export the get_gmaps_reviews function
+__all__ = ['get_gmaps_reviews']

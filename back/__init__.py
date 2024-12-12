@@ -1,6 +1,7 @@
 from pandas import DataFrame
 from back.tourism import get_df, get_geojson
 from back.weather import get_forecast, get_weather_score, weather_dict
+from .gmaps import get_gmaps_reviews
 
 df = get_df()
 geojson = get_geojson()
