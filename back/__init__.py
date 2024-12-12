@@ -18,19 +18,27 @@ def get_prediction(selection):
         ]
 
         # get gmaps_score
-        gmaps_score = 0
+        gmaps_score = 0 # get_gmaps_reviews(row)
         
-        overall_score = weather_score + 0 * gmaps_score
+        overall_score = [
+            weather_scr + 0 * gmaps_score
+            for weather_scr in weather_score
+        ]
 
         # save scores
         output.append({
             'index' : i,
-            'city': forcast['city'],
+            'city': forcast['city']['name'],
+            'code': forcast['city']['cp'],
+            'latitude': forcast['city']['latitude'],
+            'longitude': forcast['city']['longitude'],
+            'update': forcast['update'],
             'weather_desc': weather_desc,
             'weather_score' : weather_score,
             'gmaps_score' : gmaps_score,
             'overall_score' : overall_score
         })
 
-    df = DataFrame.from_dict(output, orient='columns')
+    df = DataFrame.from_dict(output)
+    df.set_index('index', inplace=True)
     return df
