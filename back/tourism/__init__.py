@@ -11,11 +11,6 @@ import plotly.express as px
 load_dotenv()
 ROOT_DIR = os.getenv('ROOT_DIR')
 
-##########################
-########## POI ###########
-##########################
-
-
 def get_geojson():
     geojson_path = os.path.join(ROOT_DIR, 'data', 'france_dept_geo.json')
 
@@ -31,10 +26,6 @@ def get_geojson():
     return france_geo
 
 
-##########################
-########## DATA ##########
-##########################
-
 def get_df():
     # Get all the df & merdge them
     df_list = []
@@ -45,10 +36,11 @@ def get_df():
         df_list.append(new_df)
     df = pd.concat(df_list)
         
-    # Preprocess df
+    # Postprocess df
     df['code_departement'] = df['code_departement'].astype(str)
     df.rename(columns={'categorie_mere':'categorie'}, inplace=True)
     df.rename(lambda x: str(x).lower(), axis='columns', inplace=True)
     df.reset_index(inplace=True)
+    df.drop(columns=['index', 'Unnamed: 0'], inplace=True)
     
     return df
