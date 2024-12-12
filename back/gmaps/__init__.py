@@ -14,10 +14,6 @@ import re
 load_dotenv()
 ROOT_DIR = os.getenv('ROOT_DIR')
 
-##########################
-####### GMAPS REVIEWS ####
-##########################
-
 def get_gmaps_reviews(place_id):
     # Configure Firefox options
     firefox_options = Options()
@@ -60,14 +56,14 @@ def get_gmaps_reviews(place_id):
             rating_text = rating_element.get_attribute('aria-label')
             rating_match = re.search(r'(\d+)', rating_text)
             if rating_match:
-                rating = float(rating_match.group(1))
+                rating = int(rating_match.group(1))
             else:
                 rating = None
 
             # Extract review text
             text = review_element.find_element(By.XPATH, ".//div[contains(@class, 'MyEned')]").text
 
-            reviews.append({'reviewer': reviewer, 'date': date, 'rating': rating, 'text': text})
+            reviews.append({'reviewer': reviewer, 'date': date, 'rating': f"{rating} stars", 'text': text})
         except Exception as e:
             print(f"Error extracting review: {e}")
 
@@ -82,4 +78,7 @@ def get_gmaps_reviews(place_id):
 # Exemple d'utilisation
 place_id = 'ChIJdUyx15R95kcRj85ZX8H8OAU'  # Chateau de Versailles
 reviews_df = get_gmaps_reviews(place_id)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.expand_frame_repr', False)
 print(reviews_df)
+#print(reviews_df.head())
