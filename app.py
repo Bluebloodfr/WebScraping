@@ -1,6 +1,7 @@
 # frontend
 import streamlit as st
-from back import df, geojson, get_prediction
+from src import df, geojson, get_prediction, best_rows
+import pandas as pd
 
 
 st.title('Weather App')
@@ -17,19 +18,18 @@ conditions = (
     df['code_departement'] == dept_code) & (
     df['categorie'].isin(categories))
 sub_df = df[conditions]
+sub_df = sub_df[:5]
 
 
 if st.button('Get Weather'):
-    if conditions == None:
+    if conditions.empty:
         st.error('Please enter at least one categorie & departement')
 
     else:
-        prediction = get_prediction(sub_df)
-        
-        if 'error' in prediction:
-            st.error(weather_data['error'])
-        else:
-            st.success(f"Weather in {weather_data['city']}:")
-            st.write(f"Temperature: {weather_data['temperature']}°C")
-            st.write(f"Description: {weather_data['description']}")
-            st.write(f"Humidity: {weather_data['humidity']}%")
+        df_prediction = get_prediction(sub_df)
+        df_prediction = pd.read_csv('data\output.csv')
+        output = best_rows(df_prediction)
+
+        st.success(f"The selection have been compute")
+        st.table(output)
+            

@@ -29,13 +29,12 @@ def get_forecast(df_row):
 def log_score(X, alpha=1/8):  
     beta = (10**(1/alpha) - 1) / 235
     bad_weather_score = alpha * np.log10(beta * X + 1)
-    
     return 1 - bad_weather_score
 
 def get_weather_score(response):
     forecast_list = response['forecast']
     weather_score = [
-        forecast['weather'].apply(log_score)
+        log_score(forecast['weather'])
         for forecast in forecast_list
     ]
     

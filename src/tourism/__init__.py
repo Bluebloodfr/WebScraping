@@ -41,6 +41,6 @@ def get_df():
     df.rename(columns={'categorie_mere':'categorie'}, inplace=True)
     df.rename(lambda x: str(x).lower(), axis='columns', inplace=True)
     df.reset_index(inplace=True)
-    df.drop(columns=['index', 'Unnamed: 0'], inplace=True)
+    df.drop(columns=['index'], inplace=True)
     
     return df
