@@ -1,8 +1,6 @@
 # frontend
 import streamlit as st
 from src import df, geojson, get_prediction, best_rows
-import pandas as pd
-
 
 st.title('Weather App')
 
@@ -27,7 +25,6 @@ if st.button('Get Weather'):
 
     else:
         df_prediction = get_prediction(sub_df)
-        df_prediction = pd.read_csv('data\output.csv')
         output = best_rows(df_prediction)
 
         st.success(f"The selection have been compute")

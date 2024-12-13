@@ -1,7 +1,8 @@
+from src.tourism import get_df, get_geojson
+from src.weather import get_forecast, get_weather_score, weather_dict
+from src.gmaps import get_gmaps_reviews
+
 from pandas import DataFrame
-from back.tourism import get_df, get_geojson
-from back.weather import get_forecast, get_weather_score, weather_dict
-from .gmaps import get_gmaps_reviews
 
 df = get_df()
 geojson = get_geojson()
@@ -55,5 +56,6 @@ def best_rows(df_prediction):
         best_row['overall_score'] = best_row['overall_score'][delay]
         
         output.append(best_row)
-
-    return DataFrame(output)
+    
+    df = DataFrame(output)
+    return df
