@@ -1,18 +1,17 @@
 import os
 import json
 from urllib.request import urlopen
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 import pandas as pd
 import geopandas as gpd
 import plotly.express as px 
 
 
-load_dotenv()
-ROOT_DIR = os.getenv('ROOT_DIR')
-
 def get_geojson():
-    geojson_path = os.path.join(ROOT_DIR, 'data', 'france_dept_geo.json')
+    geojson_path = os.path.join('data', 'france_dept_geo.json')
+    #geojson_path = "/Users/lmgiraud/Desktop/A5_ESILV/Webscraping_and_Applied_ML/WebScraping/data/france_dept_geo.json"
+
 
     # Download json file if don't exist
     if not os.path.exists(geojson_path):

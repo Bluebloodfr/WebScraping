@@ -2,9 +2,13 @@ from src.tourism import get_df, get_geojson
 from src.weather import get_forecast, get_weather_score, weather_dict
 from src.gmaps import get_gmaps_reviews
 
-from pandas import DataFrame
+from src.print_maps import *
 
-df = get_df()
+from pandas import DataFrame
+import pandas as pd
+
+#df = get_df()
+df = pd.read_csv('data/dataframe.csv', sep=',', low_memory = False)
 geojson = get_geojson()
 
 def get_prediction(df_selection):
