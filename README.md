@@ -37,9 +37,9 @@ ROOT_DIR=<root directory>
 API_KEY=<weather api key>
 ```
 
-2. Download datatourisme zip file
+2. Download datatourism zip file
 ```bash
-./back/tourisme/downlaod_zip.sh
+./src/tourism/download_zip.sh
 ```
 
 3. Run the app
