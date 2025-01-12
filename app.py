@@ -61,11 +61,13 @@ if st.button('Show Density Map'):
         st.error('Please enter at least one category & department')
     else:
         fig = print_density(sub_df)
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, use_container_width=True)
+        st.write("This map shows the density of tourism data points based on the selected categories and region.")
 
 if st.button('Show Choropleth Map'):
     if sub_df.empty:
         st.error('Please enter at least one category & department')
     else:
         fig = print_choropleth(sub_df)
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, use_container_width=True)
+        st.write("This map shows the count of tourism data points per department based on the selected categories and region.")
