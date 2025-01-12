@@ -2,6 +2,7 @@
 import streamlit as st
 from src import df, geojson, get_prediction, best_rows
 from src.gmaps import get_gmaps_reviews
+from src.tourism.print import print_density, print_choropleth
 import re
 
 st.title('Weather and Reviews App')
@@ -51,3 +52,20 @@ if st.button('Get Reviews'):
             st.table(reviews_df)
         else:
             st.error('No reviews found or an error occurred')
+
+# Add options to display density and choropleth maps
+st.header('Tourism Data Visualization')
+
+if st.button('Show Density Map'):
+    if sub_df.empty:
+        st.error('Please enter at least one category & department')
+    else:
+        fig = print_density(sub_df)
+        st.plotly_chart(fig)
+
+if st.button('Show Choropleth Map'):
+    if sub_df.empty:
+        st.error('Please enter at least one category & department')
+    else:
+        fig = print_choropleth(sub_df)
+        st.plotly_chart(fig)
