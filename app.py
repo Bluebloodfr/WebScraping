@@ -1,12 +1,9 @@
 import streamlit as st
-from src import *
 from front import *
 
 
-
-# Sidebar for navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.selectbox("Pages", ["Full App", "Scrapping Only", "About"], index=2)
+page = st.sidebar.selectbox("Pages", ["Full App", "Scrapping Only", "About"], index=0)
 
 # Display the selected page
 if page == "Full App":
@@ -46,5 +43,6 @@ else:
     ## Team
     - Louis-Melchior Giraud DIA2 - [GitHub](https://github.com/Bluebloodfr)
     - Ruben Leon DIA3 - [GitHub](https://github.com/ruben-wleon)  
+    
     ESILV - A5 - 2024/2025
     """)
