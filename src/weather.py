@@ -1,6 +1,7 @@
 import requests
 import numpy as np
 import os
+from dotenv import load_dotenv
 
 
 ##########################
@@ -8,8 +9,9 @@ import os
 ##########################
 
 # For explaination, check LandDayForecast on https://api.meteo-concept.com/documentation_openapi
+load_dotenv()
 url = f"https://api.meteo-concept.com/api/forecast/daily"
-headers = {"X-AUTH-TOKEN": os.getenv('API_KEY')}
+headers = {"X-AUTH-TOKEN": os.environ['API_KEY']}
 
 def get_forecast(df_row):
     # Build query
@@ -32,11 +34,14 @@ def log_score(X, alpha=1/8):
     return 1 - bad_weather_score
 
 def get_weather_score(response):
-    forecast_list = response['forecast']
-    weather_score = [
-        log_score(forecast['weather'])
-        for forecast in forecast_list
-    ]
+    if 'code' in response.keys():
+        raise Exception(f'API error : {response}')
+    else:
+        forecast_list = response['forecast']
+        weather_score = [
+            log_score(forecast['weather'])
+            for forecast in forecast_list
+        ]
     
     return weather_score
 

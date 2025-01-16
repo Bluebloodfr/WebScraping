@@ -1,6 +1,7 @@
-import os
 import time
+import re
 import pandas as pd
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.service import Service
@@ -8,11 +9,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from dotenv import load_dotenv
-import re
 
-load_dotenv()
-ROOT_DIR = os.getenv('ROOT_DIR')
+import re
 
 def get_gmaps_reviews(place_id):
     # Configure Firefox options
@@ -73,16 +71,13 @@ def get_gmaps_reviews(place_id):
     # Convert to DataFrame
     df_reviews = pd.DataFrame(reviews)
     return df_reviews
-'''
+
+
 # https://www.google.com/maps/place/?q=place_id:ChIJdUyx15R95kcRj85ZX8H8OAU
 # Exemple d'utilisation
-place_id = 'ChIJdUyx15R95kcRj85ZX8H8OAU'  # Chateau de Versailles
-reviews_df = get_gmaps_reviews(place_id)
-pd.set_option('display.max_columns', None)
-pd.set_option('display.expand_frame_repr', False)
-print(reviews_df)
-#print(reviews_df.head())
-'''
-
-# Export the get_gmaps_reviews function
-__all__ = ['get_gmaps_reviews']
+# place_id = 'ChIJdUyx15R95kcRj85ZX8H8OAU'  # Chateau de Versailles
+# reviews_df = get_gmaps_reviews(place_id)
+# pd.set_option('display.max_columns', None)
+# pd.set_option('display.expand_frame_repr', False)
+# print(reviews_df)
+# print(reviews_df.head())
