@@ -1,73 +1,50 @@
-# frontend
 import streamlit as st
-from src import df, geojson, get_prediction, best_rows
-from src.gmaps import get_gmaps_reviews
-from src.tourism.print import print_density, print_choropleth
-import re
+from src import *
+from front import *
 
-st.title('Weather and Reviews App')
 
-categorie_list = df['categorie'].unique()
-dept_list = geojson['nom'].unique()
-dept_list.sort()
 
-categories = st.multiselect("Choose one or more categories:", categorie_list)
-dept_name = st.selectbox("Choose a region:", dept_list)
-dept_code = geojson[geojson['nom'] == dept_name]['code'].iloc[0]
+# Sidebar for navigation
+st.sidebar.title("Navigation")
+page = st.sidebar.selectbox("Pages", ["Full App", "Scrapping Only", "About"], index=2)
 
-conditions = (
-    df['code_departement'] == dept_code) & (
-    df['categorie'].isin(categories))
-sub_df = df[conditions]
-sub_df = sub_df[:5]
+# Display the selected page
+if page == "Full App":
+    main_page()
+elif page == "Scrapping Only":
+    scrapping_page()
+else:
+    st.markdown("""
+    # Welcome to the Tourism App!
+    This app helps you find the best places to visit based on weather and Google Maps reviews.
+    You can use the full app to get personalized recommendations or just use the scrapping tool to get reviews from Google Maps.
 
-if st.button('Get Weather'):
-    if sub_df.empty:
-        st.error('Please enter at least one category & department')
-    else:
-        df_prediction = get_prediction(sub_df)
-        output = best_rows(df_prediction)
+    ## How it works
+    ### APIs
+    We use the APIs from 
+    - [DataTourisme](https://gitlab.adullact.net/adntourisme/datatourisme/api) for points of interest (or POI)
+    - [MeteoConcept](https://api.meteo-concept.com/documentation_openapi) for weather forecasts (need account, free 500 credits per day)
 
-        st.success(f"The selection has been computed")
-        st.table(output)
+    We get all the POI in France once and we keep them in a csv file. The DataTourisme API if to get the name of the POI for the scrapping.
+    
+    ### Scrapping the reviews
+    We also scrape [Google Maps](https://www.google.com/maps) for reviews and use NLP to analyze them.  
+    Almost each times, the Datatoursime and Google Maps coordinate don't match exactly and many place in France have the same name.
+    So the protocol to get the right reviews if the folowing:
+    1. Search the GPS coordinates of the POI you want to visit.
+    2. Enter the name of the POI
+    3. Clic on the first link that appears
+    4. Scrape the reviews from the link.
 
-# Add a text input for Google Maps URL
-st.header('Google Maps Reviews')
-place_url = st.text_input('Enter Google Maps URL of the place:')
+    ### Compute score
+    To get the score for a POI:
+    1. Request the weather forecast score (equivalent dict on src/weather.py dict_weather) for it localisation.
+    2. Scrapp the review and pass an NLP analysis to get the review score.
+    3. Use a log function on weather score and ponderate the review score with it.
+    4. Return the score.
 
-def extract_place_id(url):
-    match = re.search(r'place_id:([a-zA-Z0-9_-]+)', url)
-    if match:
-        return match.group(1)
-    else:
-        st.error('Invalid Google Maps URL')
-        return None
-
-if st.button('Get Reviews'):
-    place_id = extract_place_id(place_url)
-    if place_id:
-        reviews_df = get_gmaps_reviews(place_id)
-        if not reviews_df.empty:
-            st.success('Reviews have been fetched successfully')
-            st.table(reviews_df)
-        else:
-            st.error('No reviews found or an error occurred')
-
-# Add options to display density and choropleth maps
-st.header('Tourism Data Visualization')
-
-if st.button('Show Density Map'):
-    if sub_df.empty:
-        st.error('Please enter at least one category & department')
-    else:
-        fig = print_density(sub_df)
-        st.plotly_chart(fig, use_container_width=True)
-        st.write("This map shows the density of tourism data points based on the selected categories and region.")
-
-if st.button('Show Choropleth Map'):
-    if sub_df.empty:
-        st.error('Please enter at least one category & department')
-    else:
-        fig = print_choropleth(sub_df)
-        st.plotly_chart(fig, use_container_width=True)
-        st.write("This map shows the count of tourism data points per department based on the selected categories and region.")
+    ## Team
+    - Louis-Melchior Giraud DIA2 - [GitHub](https://github.com/Bluebloodfr)
+    - Ruben Leon DIA3 - [GitHub](https://github.com/ruben-wleon)  
+    ESILV - A5 - 2024/2025
+    """)
