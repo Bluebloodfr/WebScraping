@@ -1,8 +1,7 @@
-from pandas import DataFrame
 from src.weather import get_forecast, get_weather_score, weather_dict
 
 def get_prediction(df_selection):
-    output = []
+    forecast_list = []
 
     for i, row in df_selection.iterrows():
         forecast = get_forecast(row)
@@ -12,15 +11,15 @@ def get_prediction(df_selection):
         ]
 
         # get gmaps_score
-        gmaps_score = 0 # get_gmaps_reviews(row)
+        review_score = 0 # get_gmaps_reviews(row)
         
         overall_score = [
-            weather_scr + 0 * gmaps_score
+            weather_scr + 0 * review_score
             for weather_scr in weather_score
         ]
 
         # save scores
-        output.append({
+        forecast_list.append({
             'index' : i,
             'city': forecast['city']['name'],
             'code': forecast['city']['cp'],
@@ -28,28 +27,23 @@ def get_prediction(df_selection):
             'longitude': forecast['city']['longitude'],
             'weather_desc': weather_desc,
             'weather_score' : weather_score,
-            'gmaps_score' : gmaps_score,
+            'review_list' : [],
+            'review_score' : review_score,
             'overall_score' : overall_score
         })
 
-    df_prediction = DataFrame(output)
-    df_prediction.set_index('index', inplace=True)
-    return df_prediction
+    return forecast_list
 
 
-def best_rows(df_prediction):
-    output = []
+def sorted_activity_id(forecast_list):
+    days_activity_sorted = [] # for each days of the prevision (14 days)
+    for day in range(14):
+        # list the best activities for this days
+        day_overview = {
+            f['index'] : f['overall_score'][day] for f in forecast_list
+        }
+        day_overview_sorted = dict(sorted(day_overview.items(), key=lambda x: x[1], reverse=True))
+        day_overview_sorted_id = day_overview_sorted.keys()
+        days_activity_sorted.append(day_overview_sorted_id)
 
-    for delay in range(14):
-        nth_elements = df_prediction['overall_score'].apply(lambda x: x[delay])
-        output_sorted = df_prediction.iloc[nth_elements.argsort()[::-1]]
-        best_row = output_sorted.iloc[0].copy()
-        
-        best_row['weather_desc'] = best_row['weather_desc'][delay]
-        best_row['weather_score'] = best_row['weather_score'][delay]
-        best_row['overall_score'] = best_row['overall_score'][delay]
-        
-        output.append(best_row)
-    
-    df = DataFrame(output)
-    return df
+    return days_activity_sorted

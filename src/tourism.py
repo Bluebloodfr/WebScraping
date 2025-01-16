@@ -54,6 +54,6 @@ def zip_to_df():
 def get_df():
     dataframe_path = os.path.join('data', 'dataframe.csv')
     if os.path.exists(dataframe_path):
-        return pd.read_csv(dataframe_path, sep=',', low_memory = False)
+        return pd.read_csv(dataframe_path, sep=',', index_col=0, low_memory = False)
     else:
         return zip_to_df()
