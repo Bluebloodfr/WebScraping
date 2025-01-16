@@ -33,7 +33,6 @@ Le déroulé d'une requete :
 
 1. Create a file .env on root
 ```
-ROOT_DIR=<root directory>
 API_KEY=<weather api key>
 ```
 
