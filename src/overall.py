@@ -35,15 +35,14 @@ def get_prediction(df_selection):
     return forecast_list
 
 
-def sorted_activity_id(forecast_list):
-    days_activity_sorted = [] # for each days of the prevision (14 days)
+def sort_prediction(prediction_list):
+    daily_poi_sorted = [] # for each days of the prevision (14 days)
+    id2poi = {poi['index'] : poi for poi in prediction_list}
+    
     for day in range(14):
-        # list the best activities for this days
-        day_overview = {
-            f['index'] : f['overall_score'][day] for f in forecast_list
-        }
-        day_overview_sorted = dict(sorted(day_overview.items(), key=lambda x: x[1], reverse=True))
-        day_overview_sorted_id = day_overview_sorted.keys()
-        days_activity_sorted.append(day_overview_sorted_id)
-
-    return days_activity_sorted
+        id_score_dict = {poi['index'] : poi['overall_score'][day] for poi in prediction_list}
+        id_score_dict_sorted = dict(sorted(id_score_dict.items(), key=lambda item: item[1], reverse=True))
+        poi_sorted = [id2poi[id] for id in id_score_dict_sorted.keys()]
+        daily_poi_sorted.append(poi_sorted)
+    
+    return daily_poi_sorted

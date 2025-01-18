@@ -1,9 +1,10 @@
 .env
 .venv
+.vscode
 
 data/*
 api
 
 */__pycache__
-src/*.ipynb
+*.ipynb
 src/TODO

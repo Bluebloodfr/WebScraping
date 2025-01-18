@@ -23,7 +23,8 @@ def print_density(df):
 
 def print_choropleth(df):
     # Prepare the data
-    counts = df['code_departement'].value_counts().reset_index()
+    df['dept_code'] = df['codepostal'].str[:2]
+    counts = df['dept_code'].value_counts().reset_index()
     counts.columns = ['code_departement', 'count']
     france_geo = get_geojson()
 
