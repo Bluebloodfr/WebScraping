@@ -1,4 +1,5 @@
 from src.weather import get_forecast, get_weather_score, weather_dict
+from src.models import compute_sentiment_score, get_avg_score
 
 def get_prediction(df_selection):
     forecast_list = []

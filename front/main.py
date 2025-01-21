@@ -1,5 +1,6 @@
 import streamlit as st
 from src import *
+from src.gmaps import get_gmaps_reviews_by_name
 
 df = get_df()
 geojson = get_geojson()
@@ -19,7 +20,7 @@ def print_result_table(daily_poi_sorted, day):
             'adresse': row['adresse'],
             'weather_desc': poi['weather_desc'][day],
             'weather_score': poi['weather_score'][day],
-            'review_score': poi['review_score'],
+            'review_score': poi['review_score'],  # replaced row['review_score']
             'overall_score': poi['overall_score'][day],
         })
     st.table(printed_table)
@@ -61,13 +62,12 @@ def page():
 
         with review_table:
             st.header('Gmaps Reviews')
-            st.markdown("""
-            TODO :
-            - get the names of the reviews and propose it on a select box
-            - find the associate review
-            - print the review description (in dataframe) 
-            - print the review and review score
-            """)
+            st.markdown("### Gmaps Reviews by name")
+            name_selected = st.selectbox("Choose a place:", sub_df['nom'].unique())
+            if name_selected:
+                row = sub_df[sub_df['nom'] == name_selected].iloc[0]
+                reviews = get_gmaps_reviews_by_name(name_selected, row['latitude'], row['longitude'], debug=True)
+                st.write(reviews)
 
         with graph_table:
             st.header('Tourism Data Visualization')
@@ -78,4 +78,4 @@ def page():
             fig = print_choropleth(sub_df) # Choropleth Map
             st.plotly_chart(fig, use_container_width=True)
             st.write("This map shows the count of tourism data points per department based on the selected categories and region.")
-    
+
