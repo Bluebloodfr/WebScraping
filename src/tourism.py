@@ -57,7 +57,6 @@ def get_df():
         return pd.read_csv(dataframe_path, sep=',', index_col=0, low_memory = False)
     else:
         print('First run, load dataset from data.gouv.fr...')
-        # website : https://www.data.gouv.fr/fr/datasets/datatourisme-la-base-nationale-des-donnees-publiques-dinformation-touristique-en-open-data
         df = pd.read_csv('https://www.data.gouv.fr/fr/datasets/r/cf247ad9-5bcd-4c8a-8f4d-f49f0803bca1', low_memory=False)
         df = process_df(df)
         df.to_csv(dataframe_path, sep=',')

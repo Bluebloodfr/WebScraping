@@ -2,22 +2,20 @@
 
 ## Subjet
 
-Project :
+**Project** :
 - Sujet Tourisme RSE
 - Scrap via API & standard (page classique ou dynamique)
 - Objectif NLP derrière
 
-Notation :
+**Notation** :
 - Envoyer GitHub sur Moodle
 - Soutenance finale par gpr sur semaine exam
 
----
-
-Goal : Recommander Quel lieu visiter & quand en se basant sur :
-- les centres d'interêt [API](https://gitlab.adullact.net/adntourisme/datatourisme/api)
-- les prévision météo [API](https://api.meteo-concept.com/documentation_openapi )
-- Commentaires Google Maps (scrapping dynamique + NLP)
-
+**Goal** :  
+Recommander quel lieu visiter & quand en se basant sur
+- le [CSV](https://www.data.gouv.fr/fr/datasets/datatourisme-la-base-nationale-des-donnees-publiques-dinformation-touristique-en-open-data) des  Point of Interest (POI) toursistique selon le gouvernement  
+- l'[API](https://api.meteo-concept.com/documentation_openapi ) de prévision météo (necessite d'un compte et d'une clé API)
+- les commentaires Google Maps (scrapping dynamique + NLP)
 
 ## Structure
 
@@ -32,16 +30,19 @@ Le déroulé d'une requete :
 ## Initialisation
 
 1. Create a file .env on root
-```
+```bash
 API_KEY=<weather api key>
 ```
 
-2. Download datatourism zip file
+2. Install dependencies
 ```bash
-./src/tourism/download_zip.sh
+python -m venv .venv
+.venv\Scripts\activate
+python.exe -m pip install --upgrade pip
+pip install -r requirements.txt
 ```
 
-3. Run the app
+2. Run the app
 ```bash
 streamlit run app.py
 ```
