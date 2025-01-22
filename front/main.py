@@ -42,20 +42,25 @@ def page():
         
         submit_button = st.form_submit_button('Submit')
 
-    # Return output
+    # If the form is submitted, generate and store data
     if submit_button:
-        sub_df = get_subdf(df, dept_dict, dept_name).iloc[:5]    # iloc for testing
+        sub_df = get_subdf(df, dept_dict, dept_name).iloc[:5]
         prediction_list = get_prediction(sub_df)
-        
-        st.success(f"The selection has been computed")
-        result_table, review_table, graph_table = st.tabs(["Results", "Gmaps Reviews" ,"Graphiques"])
+        daily_poi_sorted = sort_prediction(prediction_list)
+        st.session_state['sub_df'] = sub_df
+        st.session_state['daily_poi_sorted'] = daily_poi_sorted
+        st.success("The selection has been computed")
+
+    # If we already have sub_df, show the tabs
+    if 'sub_df' in st.session_state and 'daily_poi_sorted' in st.session_state:
+        sub_df = st.session_state['sub_df']
+        daily_poi_sorted = st.session_state['daily_poi_sorted']
+
+        result_table, review_table, graph_table = st.tabs(["Results", "Gmaps Reviews", "Graphiques"])
         
         with result_table:
             st.header('Results')
-            daily_poi_sorted = sort_prediction(prediction_list)   # for each day, prediction sorted by overall score
             days_table_name = [f'{i} days' for i in range(14)]
-            
-            # Print table for each day
             for day, day_table in enumerate(st.tabs(days_table_name)):
                 with day_table:
                     print_result_table(daily_poi_sorted, day)

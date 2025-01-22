@@ -112,9 +112,13 @@ def get_gmaps_reviews_by_name(name, latitude, longitude, debug=False):
 
         # Wait for the first result and click it
         print("Waiting for the first result...")
-        first_result = wait.until(EC.element_to_be_clickable((By.XPATH, "(//a[contains(@class, 'hfpxzc')])[1]")))
-        print("First result found, clicking...")
-        first_result.click()
+        short_wait = WebDriverWait(driver, 2)
+        try:
+            first_result = short_wait.until(EC.element_to_be_clickable((By.XPATH, "(//a[contains(@class, 'hfpxzc')])[1]")))
+            print("First result found, clicking...")
+            first_result.click()
+        except:
+            if debug: st.write("")
 
         # Wait for the reviews button to load and click it
         print("Waiting for reviews button...")
@@ -124,7 +128,7 @@ def get_gmaps_reviews_by_name(name, latitude, longitude, debug=False):
 
         # Wait for reviews to load
         print("Waiting for reviews to load...")
-        time.sleep(5)  # Adjust the sleep time if necessary
+        time.sleep(1)  # Adjust the sleep time if necessary
 
         # Extract reviews
         reviews = []
