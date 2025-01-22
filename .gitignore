@@ -8,4 +8,4 @@ api
 */__pycache__
 *.ipynb
 src/TODO
-Makerfile
+Makefile
