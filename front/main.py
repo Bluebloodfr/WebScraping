@@ -21,6 +21,7 @@ def print_result_table(daily_poi_sorted, day):
             'weather_desc': poi['weather_desc'][day],
             'weather_score': poi['weather_score'][day],
             'review_score': poi['review_score'],  # replaced row['review_score']
+            'predicted_score': poi['predicted_score'],  # added predicted_score
             'overall_score': poi['overall_score'][day],
         })
     st.table(printed_table)

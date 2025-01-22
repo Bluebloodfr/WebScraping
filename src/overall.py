@@ -22,6 +22,11 @@ def get_prediction(df_selection):
             except (ValueError, TypeError):
                 review_ratings.append(0)
         review_score = sum(review_ratings) / len(review_ratings) if review_ratings else 0
+
+        # compute sentiment scores
+        poi = {'comments': [{'text': review['review'], 'stars': int(review['rating'][0])} for review in reviews]}
+        poi = compute_sentiment_score(poi)
+        _, predicted_score = get_avg_score(poi)
         
         overall_score = [
             weather_scr + 0 * review_score
@@ -39,6 +44,7 @@ def get_prediction(df_selection):
             'weather_score' : weather_score,
             'review_list' : reviews,
             'review_score' : review_score,
+            'predicted_score': predicted_score,
             'overall_score' : overall_score
         })
 
