@@ -54,7 +54,7 @@ def process_df(df):
 def get_df():
     dataframe_path = os.path.join('data', 'dataframe.csv')
     if os.path.exists(dataframe_path):
-        return pd.read_csv(dataframe_path, sep=',', index_col=0, low_memory = False)
+        return pd.read_csv(dataframe_path, sep=',', index_col=0)
     else:
         print('First run, load dataset from data.gouv.fr...')
         df = pd.read_csv('https://www.data.gouv.fr/fr/datasets/r/cf247ad9-5bcd-4c8a-8f4d-f49f0803bca1', low_memory=False)
