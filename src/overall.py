@@ -1,5 +1,6 @@
 from src.weather import get_forecast, get_weather_score, weather_dict
 from src.models import compute_sentiment_score, get_avg_score
+from src.gmaps import get_gmaps_reviews_by_name
 
 def get_prediction(df_selection):
     forecast_list = []
@@ -12,7 +13,15 @@ def get_prediction(df_selection):
         ]
 
         # get gmaps_score
-        review_score = 0 # get_gmaps_reviews(row)
+        reviews = get_gmaps_reviews_by_name(row['nom'], row['latitude'], row['longitude'])
+        review_ratings = []
+        for review in reviews:
+            try:
+                rating = int(review['rating'][0])
+                review_ratings.append(rating)
+            except (ValueError, TypeError):
+                review_ratings.append(0)
+        review_score = sum(review_ratings) / len(review_ratings) if review_ratings else 0
         
         overall_score = [
             weather_scr + 0 * review_score
@@ -28,7 +37,7 @@ def get_prediction(df_selection):
             'longitude': forecast['city']['longitude'],
             'weather_desc': weather_desc,
             'weather_score' : weather_score,
-            'review_list' : [],
+            'review_list' : reviews,
             'review_score' : review_score,
             'overall_score' : overall_score
         })
