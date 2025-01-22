@@ -130,6 +130,18 @@ def get_gmaps_reviews_by_name(name, latitude, longitude, debug=False):
         print("Waiting for reviews to load...")
         time.sleep(1)  # Adjust the sleep time if necessary
 
+        # Scroll to load more reviews
+        try:
+            scrollable_div_center = driver.find_element(
+                By.CSS_SELECTOR,
+                "div.bJzME.Hu9e2e.tTVLSc div.m6QErb.DxyBCb.kA9KIf.dS8AEf.XiKgde"
+            )
+            for _ in range(3):
+                driver.execute_script("arguments[0].scrollBy(0, 500)", scrollable_div_center)
+                time.sleep(1)
+        except:
+            print("Middle reviews container not found, skipping scroll.")
+
         # Extract reviews
         reviews = []
         review_elements = driver.find_elements(By.XPATH, "//div[contains(@class, 'jftiEf')]")
