@@ -1,5 +1,5 @@
 import plotly.express as px
-from src.tourism import get_geojson
+from src.tourism import geojson
 
 def print_density(df):
     fig = px.density_mapbox(df, 
@@ -26,12 +26,11 @@ def print_choropleth(df):
     df['dept_code'] = df['codepostal'].str[:2]
     counts = df['dept_code'].value_counts().reset_index()
     counts.columns = ['code_departement', 'count']
-    france_geo = get_geojson()
 
     # Choropleth map
     fig = px.choropleth_mapbox(
         counts,
-        geojson=france_geo,                 # Your geojson file
+        geojson=geojson,                 # Your geojson file
         locations='code_departement',       # Match with geojson keys
         color='count',                      # Count of occurrences
         featureidkey='properties.code',     # Match geojson property

@@ -1,25 +1,10 @@
 import os
 import json
 from urllib.request import urlopen
+import streamlit as st
 
 import pandas as pd
 import geopandas as gpd
-import plotly.express as px 
-
-
-def get_geojson():
-    geojson_path = os.path.join('data', 'france_dept_geo.json')
-
-    # Download json file if don't exist
-    if not os.path.exists(geojson_path):
-        poi_url = 'https://france-geojson.gregoiredavid.fr/repo/departements.geojson'
-        france_geojson = json.load(urlopen(poi_url))
-        json.dump(france_geojson, open(geojson_path, 'w'))
-        print("Point of interest download")
-    
-    # Convert in GeoDataFrame
-    france_geo = gpd.read_file(geojson_path)
-    return france_geo
 
 
 def process_df(df):
@@ -33,10 +18,11 @@ def process_df(df):
         'URI_ID_du_POI' : 'url'
     }
     drop_list = [ 'Categories_de_POI',  'Covid19_mesures_specifiques',  'Createur_de_la_donnee',  'SIT_diffuseur',  'Classements_du_POI', 'Code_postal_et_commune', 'Contacts_du_POI', 'Date_de_mise_a_jour']
-    order_list = [ 'nom', 'latitude','longitude','adresse', 'codepostal', 'commune', 'URL', 'description' ]
+    order_list = [ 'nom', 'latitude','longitude', 'adresse', 'dept', 'codepostal', 'commune', 'url', 'description' ]
 
     # Apply modifications
     df[['codepostal', 'commune']] = df['Code_postal_et_commune'].str.split('#', expand=True)
+    df['dept'] = df['codepostal'].str[:2]
     df.rename(rename_dict,axis=1, inplace=True)
     df.drop(drop_list, axis=1, inplace=True)
     df = df.reindex(columns=order_list)
@@ -50,26 +36,52 @@ def process_df(df):
 
     return df
 
-
-def get_df():
+@st.cache_data
+def get_df(force_download=False):
     dataframe_path = os.path.join('data', 'dataframe.csv')
-    if os.path.exists(dataframe_path):
-        return pd.read_csv(dataframe_path, sep=',', index_col=0, low_memory = False)
+
+    if os.path.exists(dataframe_path) and not force_download:
+        df = pd.read_csv(dataframe_path, sep=',', index_col=0, 
+            dtype={'dept': 'str'}, low_memory = False)
     else:
-        print('First run, load dataset from data.gouv.fr...')
         df = pd.read_csv('https://www.data.gouv.fr/fr/datasets/r/cf247ad9-5bcd-4c8a-8f4d-f49f0803bca1', low_memory=False)
         df = process_df(df)
         df.to_csv(dataframe_path, sep=',')
-        return df
 
+    return df
 
-def get_subdf(df, dept_dict, dept_name=[]):
-    # By default, select all
-    dept_list = list(dept_dict.keys())
-    dept_name = dept_list if dept_name  == [] else dept_name
+########################################
+########################################
 
-    # Filter data
+@st.cache_data
+def get_geojson():
+    geojson_path = os.path.join('data', 'france_dept_geo.json')
+
+    # Download json file if don't exist
+    if not os.path.exists(geojson_path):
+        poi_url = 'https://france-geojson.gregoiredavid.fr/repo/departements.geojson'
+        france_geojson = json.load(urlopen(poi_url))
+        json.dump(france_geojson, open(geojson_path, 'w'))
+        print("Point of interest download")
+    
+    # Convert in GeoDataFrame
+    france_geo = gpd.read_file(geojson_path)
+    
+    return france_geo
+
+geojson = get_geojson()
+dept_dict = {
+    f"{row['code']} - {row['nom']}" : row['code'] 
+    for _, row in geojson.iterrows()
+}
+
+@st.cache_data
+def get_subdf(df, dept_name=[]):
+    # Filter data is selection
     dept_code = [dept_dict[name] for name in dept_name]
-    sub_df = df[df['codepostal'].str.startswith(tuple(dept_code))]
+    if dept_name != []:
+        sub_df = df[df['dept'].isin(dept_code)]
+    else:
+        sub_df = df.copy()
 
     return sub_df
