@@ -22,20 +22,18 @@ def predict_sentiment(texts):
     score_rescale = list(map(lambda x: x + 1, score))
     return score_rescale
 
-def manage_scores(review_list):
+def add_sentiment_score(review_list):
     # compute sentiment score
     review_texts = [r['review'] for r in review_list]
-    model_scores = predict_sentiment(review_texts)
 
-    # clean ratings and add sentiment score
+    if len(review_texts) > 0:
+        model_scores = predict_sentiment(review_texts)
+    else:
+        model_scores = [0] * len(review_list)
+
     for review, senti_score in zip(review_list, model_scores):
-        try:
-            review['rating'] = int(review['rating'][0])
-        except ValueError:
-            review['rating'] = -1
-        
         review['star'] = senti_score
-    
+
     return review_list
 
 

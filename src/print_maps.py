@@ -1,5 +1,5 @@
 import plotly.express as px
-from src.tourism import geojson
+from src import geojson
 
 def print_density(df):
     fig = px.density_mapbox(df, 
@@ -19,7 +19,7 @@ def print_density(df):
         margin=dict(l=0, r=0, b=0, t=30, pad=4)
     )
     fig.update_traces(hoverinfo='skip', hovertemplate=None)
-    return fig  # Return the figure instead of showing it
+    return fig
 
 def print_choropleth(df):
     # Prepare the data
@@ -49,4 +49,4 @@ def print_choropleth(df):
         ),
         margin={"r":0, "t":30, "l":0, "b":0}
     )
-    return fig  # Return the figure instead of showing it
+    return fig

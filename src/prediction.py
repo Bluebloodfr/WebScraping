@@ -1,11 +1,8 @@
 import streamlit as st
 import pandas as pd
-import json
+import numpy as np
 
-from src.weather import get_forecast, get_weather_score, weather_dict
-from src.models import manage_scores, get_avg_score
-from src.gmaps import get_gmaps_reviews_by_name
-
+from src import *
 
 @st.cache_data
 def get_prediction(df_sub):
@@ -20,17 +17,17 @@ def get_prediction(df_sub):
         ]
 
         # scrap gmaps reviews
-        #review_list = get_gmaps_reviews_by_name(row['nom'], row['latitude'], row['longitude'])
-        review_list = json.load(open('data/review_list_raw.json'))
-        review_list = manage_scores(review_list)
+        review_list = get_reviews(row)
+        review_list = add_sentiment_score(review_list)
         stars_avg, rating_avg = get_avg_score(review_list)
         
         # compute overall score
-        prediction_scr = stars_avg / 5
-        overall_score = [
-            weather_scr + prediction_scr
-            for weather_scr in weather_score
-        ]
+        if stars_avg:
+            s_scr = stars_avg / 5
+            r_scr = rating_avg / 5
+            overall_score = [np.mean([w_scr, s_scr, r_scr]) for w_scr in weather_score]
+        else:
+            overall_score = weather_score.copy()
 
         # save scores
         prediction_dict[i] = {
