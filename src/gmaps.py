@@ -10,9 +10,6 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-import re
-import streamlit as st
-
 def get_gmaps_reviews(place_id):
     # Configure Firefox options
     firefox_options = Options()
@@ -110,7 +107,7 @@ def get_gmaps_reviews_by_name(name, latitude, longitude, debug=False):
             print("First result found, clicking...")
             first_result.click()
         except:
-            if debug: st.write("")
+            if debug: print()
 
         # Wait for the reviews button to load and click it
         print("Waiting for reviews button...")
