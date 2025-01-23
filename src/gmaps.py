@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 def find_poi(driver, name):
     # Define waiting time
-    long_wait = WebDriverWait(driver, 15)
+    long_wait = WebDriverWait(driver, 30)
     short_wait = WebDriverWait(driver, 2)
 
     # click "Tout accepter"
