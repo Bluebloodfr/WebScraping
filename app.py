@@ -15,17 +15,19 @@ if 'review_name' not in st.session_state:
     st.session_state.review_name = None
 
 st.header('Full App')
-dept_name = st.session_state.dept_name
+#dept_name = st.session_state.dept_name
 
-if dept_name == []:
-    st.write('By default, all the filter are selected.')
-    dept_name = st.multiselect("Choose a department:", sorted(dept_dict.keys()), key='dept_name')
-    # page automatically refreshes when a selection is made
-else:
-    st.write('You have selected: ', dept_name)
-    sub_df = get_subdf(df, dept_name).iloc[:5]  # iloc to limit API use
-    prediction_list = get_prediction(sub_df)
-    st.session_state.compute = (sub_df, prediction_list)
+st.write('By default, all the filter are selected.')
+dept_name = st.multiselect("Choose a department:", 
+    options=sorted(dept_dict.keys()), 
+    default=st.session_state.dept_name)
+st.session_state.dept_name = dept_name
+
+
+if dept_name and dept_name != []:
+    df_sub = get_subdf(df, dept_name).iloc[:5]  # iloc to limit API use
+    df_pred = get_prediction(df_sub)
+    #st.session_state.compute = (df_sub, df_pred)
     st.success("The selection has been computed")
     
     # Choose between different table
@@ -36,13 +38,13 @@ else:
     
     with result_table:
         st.session_state.table = result_table
-        print_result_table(prediction_list, sub_df)
+        print_result_table(df_sub, df_pred)
     with review_table:
         st.session_state.table = review_table
-        print_review_table(prediction_list, sub_df)
+        print_review_table(df_sub, df_pred)
     with graph_table:
         st.session_state.table = graph_table
-        print_graph_table(sub_df)
+        print_graph_table(df_sub)
 
 #st.header('Scrapping only')
 #print_scrapping_only()
